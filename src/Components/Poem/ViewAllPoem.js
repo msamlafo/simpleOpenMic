@@ -10,6 +10,7 @@ import {
 import PagesPagination from '../../Common/PagesPagination';
 import Like from '../../Common/Like';
 import {Paginate} from '../../Common/Paginate';
+import CreateComment from '../Comment/CreateComment';
 
 class ViewPoem extends Component {
   constructor(props) {

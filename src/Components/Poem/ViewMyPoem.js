@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Button, Badge, CardTitle, CardText, CardSubtitle } from 'reactstrap';
-import DeletePoem from './DeletePoem';
 import { Toast, ToastBody, ToastHeader } from 'reactstrap';
+import CreatePoem from './CreatePoem';
+import DeletePoem from './DeletePoem';
 import UpdatePoem from './UpdatePoem';
 
 class ViewMyPoem extends Component {
@@ -64,6 +65,13 @@ class ViewMyPoem extends Component {
     console.log(this.state);
   };
 
+  handleCreate = () =>{
+    console.log("create poem button clicked");
+    const state = { ...this.state };
+    state.showModal = true;
+    this.setState(state);
+  }
+
   handleDelete = (poem) => {
     console.log(poem);
     const poems = this.state.poems.filter((p) => p.id !== poem.id);
@@ -105,6 +113,7 @@ class ViewMyPoem extends Component {
           <ToastHeader>openMic Poems</ToastHeader>
           <ToastBody>You do not have any poems. Create a new poem</ToastBody>
           {/* insert CreatePoem button here */}
+          <Button onClick={() => this.handleCreate()} color="dark">Create poem</Button>
         </Toast>
       </div>
     ) : (
@@ -152,6 +161,10 @@ class ViewMyPoem extends Component {
             onTitleChange={this.handleTitleChange}
             onPoemWriterCommentChange={this.handlePoemWriterCommentChange}
             getPoem={this.getPoem}
+        />
+        <CreatePoem 
+          showModal={this.state.showModal}
+          onToggle={this.handleToggle}
         />
     </main>
     );

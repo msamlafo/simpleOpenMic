@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CustomInput, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { CustomInput, Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Hurray from '../../Common/Hurray';
 
 class CreatePoem extends Component {
@@ -37,8 +37,8 @@ class CreatePoem extends Component {
             })
             .then((result) => result.json())
             .then((response) => {
-                console.log(response);
                 if (response.status === 200){
+                    console.log(response);
                     // instead of setting the state, go to a new component that displays either the new record and/or a success message
                     return (<Hurray />)
                 }
@@ -82,14 +82,23 @@ class CreatePoem extends Component {
         return ( 
             <main className="container">
                 <Form onSubmit={event => this.handleSubmit(event)}>
+                    <Modal
+                        isOpen={this.props.showModal}
+                        toggle={this.props.onToggle}
+                        className={this.className}
+                        >
+                        <ModalHeader toggle={this.props.onToggle} charCode="X">
+                        Create a poem
+                        </ModalHeader>
+                    <ModalBody>    
                     <FormGroup>
                         <Label hidden>Title</Label> 
-                        <Input type="text" placeholder="Title" value={this.state.createdPoem.title} onChange={(event)=>this.handleTitleChange(event)}></Input>
+                        <Input type="text" placeholder="Title" name="title" value={this.state.createdPoem.title} onChange={(event)=>this.handleTitleChange(event)}></Input>
                     </FormGroup>
                     <FormGroup>
                         <Label for="exampleCustomSelect" hidden >Category</Label>
                         <CustomInput type="select" id="exampleCustomSelect" name="customSelect">
-                        <option value={this.state.category}
+                        <option name="category" value={this.state.category}
                         onChange={(event)=>this.handleCategoryChange(event)} >Select Category</option>
                         <option>Blank verse</option>
                         <option>Rhymed poetry</option>
@@ -110,13 +119,18 @@ class CreatePoem extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label for="writeUp" hidden>Poem Write Up</Label>
-                        <Input type="textarea" name="text" value={this.state.writeUp} onChange={(event) =>{this.handleWriteUpChange(event)}} id="exampleText" placeholder="Poem Write Up"/>
+                        <Input type="textarea" name="writeUp" value={this.state.writeUp} onChange={(event) =>{this.handleWriteUpChange(event)}} id="exampleText" placeholder="Poem Write Up"/>
                     </FormGroup>
                     <FormGroup>
                         <Label for="poemWriterComment" hidden>Poem Writer Comment</Label>
-                        <Input type="textarea" name="text" value={this.state.poemWriterComment} onChange={(event)=>this.handlePoemWriterCommentChange(event)} id="exampleText" placeholder="Comment"/>
+                        <Input type="textarea" name="poemWriterComment" value={this.state.poemWriterComment} onChange={(event)=>this.handlePoemWriterCommentChange(event)} id="exampleText" placeholder="Comment"/>
                     </FormGroup>
-                    <Button type="submit" color="primary" size="lg">Create Poem</Button>
+                    </ModalBody>
+                    <ModalFooter
+                    >
+                    <Button type="submit" color="primary" size="lg" onClick={this.props.onToggle}>Create Poem</Button>
+                    </ModalFooter>
+                    </Modal>
                 </Form>
             </main>
          );

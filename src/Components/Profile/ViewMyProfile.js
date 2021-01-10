@@ -19,17 +19,24 @@ class ViewMyProfile extends Component {
       profileInEdit: {},
       showModal: false,
       reload: false,
+      heading: 'Update Profile',
     };
   }
 
   getProfile = () => {
     const API_URL = `${process.env.REACT_APP_API_URL}/profile/mine`;
+    const params = this.props.match.params;
+    const heading =
+      params && params.type === 'new'
+        ? 'Complete Your Profile'
+        : 'Update Profile';
+    const showModal = params && params.type === 'new' && !this.state.reload;
+
     fetch(`${API_URL}`, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: process.env.REACT_APP_user_token,
-        //'Authorization': localStorage.getItem("token")
+        Authorization: localStorage.getItem('token'),
       }),
     })
       .then((result) => result.json())
@@ -37,21 +44,22 @@ class ViewMyProfile extends Component {
         console.log(response);
         if (response.status === 200) {
           const myProfile = {
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            picUrl: response.data.picUrl,
-            about: response.data.about,
-            hobbies: response.data.hobbies,
-            poemWriterSince: response.data.poemWriterSince,
-            funFact: response.data.funFact,
-            dreamJob: response.data.dreamJob,
-            resumeUpload: response.data.resumeUpload,
+            firstName: response.data.firstName || '',
+            lastName: response.data.lastName || '',
+            picUrl: response.data.picUrl || '',
+            about: response.data.about || '',
+            hobbies: response.data.hobbies || '',
+            poemWriterSince: response.data.poemWriterSince || '',
+            funFact: response.data.funFact || '',
+            dreamJob: response.data.dreamJob || '',
+            resumeUpload: response.data.resumeUpload || '',
           };
           this.setState({
             profile: myProfile,
             profileInEdit: myProfile,
             reload: false,
-            showModal: false,
+            heading: heading,
+            showModal: showModal,
           });
         } else {
           console.log('Not successful');
@@ -85,32 +93,31 @@ class ViewMyProfile extends Component {
   };
 
   handleReload = () => {
-    this.setState({reload: true});
+    this.setState({ reload: true });
   };
 
   render() {
     const profile = this.state.profile;
     return (
-      <main className="container">
+      <div className="container">
         <Card>
           <CardImg
             top
-            width="100%"
-            src="/assets/318x180.svg"
+            style={{width:'30vw'}}
+            src={profile.picUrl}
             alt="Card image cap"
           />
           <CardBody>
-            <CardTitle tag="h5">{profile.firstName}</CardTitle>
-            <CardTitle tag="h5">{profile.lastName}</CardTitle>
+            <CardTitle tag="h5"><strong>{profile.firstName}{" "}{profile.lastName}</strong></CardTitle>
             <CardSubtitle tag="h6" className="mb-2 text-muted">
               {profile.email}
             </CardSubtitle>
-            <CardText>{profile.about}</CardText>
-            <CardTitle tag="h5">{profile.hobbies}</CardTitle>
-            <CardTitle tag="h5">{profile.poemWriterSince}</CardTitle>
-            <CardTitle tag="h5">{profile.funFact}</CardTitle>
-            <CardTitle tag="h5">{profile.dreamJob}</CardTitle>
-            <CardTitle tag="h5">{profile.resumeUpload}</CardTitle>
+            <CardText className="text-muted">About: {profile.about}</CardText>
+            <CardText className="text-muted">Hobbies: {profile.hobbies}</CardText>
+            <CardText><strong>Writer Since:</strong> {profile.poemWriterSince}</CardText>
+            <CardText>Fun Fact: {profile.funFact}</CardText>
+            <CardText>Dream Job{profile.dreamJob}</CardText>
+            <CardText>Resume: {profile.resumeUpload}</CardText>
             <Button color="primary" onClick={() => this.handleToggle()}>
               Edit Profile
             </Button>
@@ -118,12 +125,13 @@ class ViewMyProfile extends Component {
         </Card>
         <UpdateProfile
           showModal={this.state.showModal}
-          onChange={this.handleChange}
           profile={this.state.profileInEdit}
+          heading={this.state.heading}
+          onChange={this.handleChange}
           onToggle={this.handleToggle}
           onReload={this.handleReload}
         />
-      </main>
+      </div>
     );
   }
 }

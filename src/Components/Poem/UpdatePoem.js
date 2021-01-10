@@ -17,7 +17,7 @@ import Hurray from '../../Common/Hurray';
 
 //currently unable to view edited poem on the ViewMyPoem component
 class UpdatePoem extends Component {
-  handleSubmit(event) {
+  handleSubmit= (event) =>{
     event.preventDefault();
     const API_URL = `${process.env.REACT_APP_API_URL}/poetry/${this.props.poem.id}`;
 
@@ -56,16 +56,13 @@ class UpdatePoem extends Component {
   render() {
     return (
       <React.Fragment>
-        <Button color="danger" onClick={this.props.onToggle}>
-          Update Poem
-        </Button>
         <Form onSubmit={(event) => this.handleSubmit(event)}>
           <Modal
             isOpen={this.props.showModal}
             toggle={this.props.onToggle}
             className={this.className}
           >
-            <ModalHeader toggle={this.props.onToggle} charCode="Y">
+            <ModalHeader toggle={this.props.onToggle} charCode="X">
               Edit your poem
             </ModalHeader>
             <ModalBody>
@@ -90,7 +87,7 @@ class UpdatePoem extends Component {
                   <CustomInput
                     type="select"
                     id="exampleCustomSelect"
-                    name="customSelect"
+                    name="category"
                     value={this.props.poem.category}
                     onChange={(event) => this.props.onCategoryChange(event)}
                   >

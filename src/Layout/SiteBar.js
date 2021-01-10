@@ -39,6 +39,12 @@ class SiteBar extends Component {
                                 <NavLink className="nav-link" to="/profile/mine">My Profile</NavLink>
                             </NavItem>
                             <NavItem>
+                                <NavLink className="nav-link" to="/login">Login</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink className="nav-link" to="/signup">SignUp</NavLink>
+                            </NavItem>
+                            <NavItem>
                                 <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle nav caret>
                                     SignUp/Login
